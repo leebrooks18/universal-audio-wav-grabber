@@ -1,5 +1,4 @@
 // api/callback.js
-import fetch from 'node-fetch';
 
 function parseCookies(cookieHeader = '') {
   return cookieHeader.split(';').map(c => c.trim()).reduce((acc, pair) => {
@@ -56,7 +55,10 @@ export default async function handler(req, res) {
 
     const authHeader = 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
-    const tokenRes = await fetch(tokenUrl, {
+    // Use global fetch when available (Node 18+). Fallback to dynamic import of node-fetch only if necessary.
+    const fetchImpl = (typeof globalThis.fetch === 'function') ? globalThis.fetch : (await import('node-fetch').then(m => m.default));
+
+    const tokenRes = await fetchImpl(tokenUrl, {
       method: 'POST',
       headers: {
         'Authorization': authHeader,
