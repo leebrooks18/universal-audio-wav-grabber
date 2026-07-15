@@ -1,0 +1,5 @@
+Redeploy trigger file
+
+This file is updated to trigger a Vercel production deployment from main.
+
+Timestamp: 2026-07-15T16:20:00Z
